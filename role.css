@@ -1,0 +1,383 @@
+/* ============================================
+   ROLE SELECTION PAGE — Specific Styles
+   ============================================ */
+
+/* ── Nav ── */
+.role-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-md) var(--spacing-2xl);
+  background: rgba(8, 12, 20, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.role-nav-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+/* User pill */
+.user-pill {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: 6px 14px 6px 8px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-full);
+}
+
+.user-avatar {
+  width: 28px;
+  height: 28px;
+  background: var(--grad-primary);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-on-primary);
+}
+
+.user-name {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+/* Logout button */
+.btn-logout {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.btn-logout:hover {
+  background: rgba(255, 68, 68, 0.1);
+  border-color: rgba(255, 68, 68, 0.3);
+  color: #FF4444;
+}
+
+/* ── Main ── */
+.role-main {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 120px var(--spacing-xl) var(--spacing-3xl);
+}
+
+.role-container {
+  width: 100%;
+  max-width: 900px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-2xl);
+}
+
+/* ── Heading ── */
+.role-heading {
+  text-align: center;
+}
+
+.role-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  background: rgba(255, 107, 53, 0.1);
+  border: 1px solid rgba(255, 107, 53, 0.25);
+  border-radius: var(--radius-full);
+  padding: 6px 14px;
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  color: var(--color-accent);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: var(--spacing-lg);
+}
+
+.role-title {
+  font-size: var(--font-size-4xl);
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  color: var(--text-primary);
+  margin-bottom: var(--spacing-sm);
+}
+
+.role-subtitle {
+  font-size: var(--font-size-base);
+  color: var(--text-secondary);
+}
+
+/* ── Role Cards Grid ── */
+.role-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--spacing-lg);
+  width: 100%;
+}
+
+/* ── Individual Role Card ── */
+.role-card {
+  position: relative;
+  background: var(--bg-card);
+  border: 2px solid var(--border-card);
+  border-radius: var(--radius-xl);
+  padding: var(--spacing-xl);
+  cursor: pointer;
+  transition: all var(--transition-spring);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  outline: none;
+}
+
+.role-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(145deg, rgba(255,255,255,0.04) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.role-card:hover {
+  transform: translateY(-6px);
+  border-color: rgba(255,255,255,0.2);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+}
+
+.role-card:focus-visible {
+  box-shadow: 0 0 0 3px var(--color-primary-glow);
+  border-color: var(--color-primary);
+}
+
+/* Glow overlay */
+.role-card-glow {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity var(--transition-normal);
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+.athlete-glow { background: radial-gradient(ellipse at 50% 0%, rgba(0,212,255,0.15) 0%, transparent 70%); }
+.coach-glow   { background: radial-gradient(ellipse at 50% 0%, rgba(255,107,53,0.15) 0%, transparent 70%); }
+.club-glow    { background: radial-gradient(ellipse at 50% 0%, rgba(255,215,0,0.12)  0%, transparent 70%); }
+
+.role-card:hover .role-card-glow,
+.role-card.selected .role-card-glow { opacity: 1; }
+
+/* Check mark */
+.role-check {
+  position: absolute;
+  top: var(--spacing-md);
+  right: var(--spacing-md);
+  width: 24px;
+  height: 24px;
+  background: var(--grad-primary);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transform: scale(0.5);
+  transition: all var(--transition-spring);
+}
+
+body.rtl .role-check {
+  right: auto;
+  left: var(--spacing-md);
+}
+
+.role-check svg {
+  width: 14px;
+  height: 14px;
+  stroke: white;
+  stroke-width: 2.5;
+  fill: none;
+}
+
+.role-card.selected .role-check {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Icon wrapper */
+.role-icon-wrap {
+  width: 68px;
+  height: 68px;
+  border-radius: var(--radius-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform var(--transition-spring);
+}
+
+.role-card:hover .role-icon-wrap { transform: scale(1.08); }
+
+.athlete-icon { background: linear-gradient(135deg, rgba(0,212,255,0.2), rgba(0,102,204,0.2)); border: 1px solid rgba(0,212,255,0.25); color: var(--color-primary); }
+.coach-icon   { background: linear-gradient(135deg, rgba(255,107,53,0.2), rgba(204,34,0,0.2));  border: 1px solid rgba(255,107,53,0.25); color: var(--color-accent); }
+.club-icon    { background: linear-gradient(135deg, rgba(255,215,0,0.2),  rgba(200,160,0,0.2)); border: 1px solid rgba(255,215,0,0.25);  color: var(--color-gold); }
+
+/* Role name */
+.role-name {
+  font-size: var(--font-size-xl);
+  font-weight: 800;
+  color: var(--text-primary);
+  letter-spacing: -0.01em;
+}
+
+/* Role description */
+.role-desc {
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  line-height: 1.55;
+}
+
+/* Role features list */
+.role-features {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: var(--spacing-sm);
+}
+
+.role-features li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: var(--font-size-xs);
+  color: var(--text-muted);
+}
+
+.role-features li svg { stroke: var(--color-primary); flex-shrink: 0; }
+
+/* Arrow icon */
+.role-arrow {
+  margin-top: auto;
+  color: var(--text-muted);
+  transition: all var(--transition-normal);
+  align-self: flex-end;
+}
+
+.role-card:hover .role-arrow,
+.role-card.selected .role-arrow {
+  color: var(--color-primary);
+  transform: translateX(4px);
+}
+
+body.rtl .role-card:hover .role-arrow,
+body.rtl .role-card.selected .role-arrow {
+  transform: translateX(-4px);
+}
+
+/* ── Selected state (border colours by role) ── */
+.role-card[data-role="athlete"].selected {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 1px var(--color-primary), 0 20px 60px rgba(0,212,255,0.15);
+}
+
+.role-card[data-role="coach"].selected {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 1px var(--color-accent), 0 20px 60px rgba(255,107,53,0.15);
+}
+
+.role-card[data-role="club"].selected {
+  border-color: var(--color-gold);
+  box-shadow: 0 0 0 1px var(--color-gold), 0 20px 60px rgba(255,215,0,0.12);
+}
+
+/* ── CTA section ── */
+.role-cta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-sm);
+  width: 100%;
+  max-width: 360px;
+}
+
+.btn-continue {
+  width: 100%;
+  padding: 16px 32px;
+  font-size: var(--font-size-lg);
+  border-radius: var(--radius-lg);
+}
+
+.btn-arrow {
+  transition: transform var(--transition-normal);
+}
+
+.btn-continue:not(:disabled):hover .btn-arrow {
+  transform: translateX(4px);
+}
+
+body.rtl .btn-continue:not(:disabled):hover .btn-arrow {
+  transform: translateX(-4px);
+}
+
+.role-hint {
+  font-size: var(--font-size-xs);
+  color: var(--text-muted);
+  text-align: center;
+}
+
+/* ── Footer ── */
+.role-footer {
+  text-align: center;
+  padding: var(--spacing-lg);
+  font-size: var(--font-size-xs);
+  color: var(--text-muted);
+  border-top: 1px solid var(--border-subtle);
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .role-grid {
+    grid-template-columns: 1fr;
+    max-width: 420px;
+  }
+
+  .role-nav {
+    padding: var(--spacing-md) var(--spacing-lg);
+  }
+
+  .user-name { display: none; }
+
+  .role-main {
+    padding-top: 100px;
+  }
+
+  .role-title {
+    font-size: var(--font-size-3xl);
+  }
+}
+
+@media (max-width: 480px) {
+  .role-nav {
+    padding: var(--spacing-md);
+  }
+  .role-main {
+    padding: 90px var(--spacing-md) var(--spacing-2xl);
+  }
+}
