@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Start Academy</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Tajawal', 'sans-serif'],
+          },
+          colors: {
+            primary: '#007BFF', // Electric Blue
+            bgLight: '#F8FAFC', // Very light grey/blue for background
+            textMain: '#1E293B',
+            textMuted: '#64748B'
+          },
+          boxShadow: {
+            'soft': '0 10px 25px -5px rgba(0, 123, 255, 0.1), 0 8px 10px -6px rgba(0, 123, 255, 0.05)',
+            'soft-hover': '0 20px 25px -5px rgba(0, 123, 255, 0.15), 0 10px 10px -5px rgba(0, 123, 255, 0.05)'
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      background-color: #F8FAFC;
+      color: #1E293B;
+    }
+    
+    .hide { display: none !important; }
+    
+    /* Soft UI components */
+    .soft-card {
+      background: #FFFFFF;
+      border-radius: 24px;
+      border: 1px solid rgba(0,0,0,0.03);
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.025);
+      transition: all 0.3s ease;
+    }
+    .soft-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
+      border-color: rgba(0, 123, 255, 0.2);
+    }
+
+    /* Input styling */
+    .form-input {
+      width: 100%;
+      padding: 1rem 1.25rem;
+      border-radius: 16px;
+      background: #F1F5F9;
+      border: 2px solid transparent;
+      color: #1E293B;
+      transition: all 0.3s ease;
+      font-weight: 500;
+    }
+    .form-input:focus {
+      outline: none;
+      background: #FFFFFF;
+      border-color: #007BFF;
+      box-shadow: 0 0 0 4px rgba(0, 123, 255, 0.1);
+    }
+    .form-input::placeholder {
+      color: #94A3B8;
+    }
+
+    /* Primary button */
+    .btn-primary {
+      background: #007BFF;
+      color: white;
+      font-weight: 700;
+      padding: 1rem 2rem;
+      border-radius: 16px;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .btn-primary:hover {
+      background: #0056b3;
+      transform: translateY(-2px);
+      box-shadow: 0 10px 15px -3px rgba(0, 123, 255, 0.3);
+    }
+
+    /* Specific sport card */
+    .sport-btn {
+      background: #FFFFFF;
+      border-radius: 20px;
+      border: 2px solid #F1F5F9;
+      transition: all 0.2s ease;
+    }
+    .sport-btn:hover {
+      background: #F8FAFC;
+      border-color: #007BFF;
+      transform: translateY(-2px);
+    }
+    
+    /* Hide scrollbar for tabs */
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    
+    /* Animations */
+    .fade-in {
+      animation: fadeIn 0.4s ease-out forwards;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Custom Modal CSS to bypass Tailwind compiler issues */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background-color: rgba(0, 0, 0, 0.5) !important;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+    .custom-modal {
+      background-color: #FFFFFF !important;
+      width: 100%;
+      max-width: 24rem;
+      border-radius: 24px;
+      padding: 1.5rem;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    }
+  </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4 md:p-8">
+
+  <main id="app-container" class="w-full max-w-lg mx-auto relative fade-in">
+    
+    <!-- ==============================================
+         VIEW 0: LOGIN SCREEN
+    =============================================== -->
+    <section id="view-login" class="space-y-6" aria-label="تسجيل الدخول">
+      <div class="text-center mb-8">
+        <div class="w-20 h-20 mx-auto bg-white rounded-full shadow-soft flex items-center justify-center mb-4 text-primary">
+          <svg viewBox="0 0 24 24" fill="currentColor" class="w-10 h-10">
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+          </svg>
+        </div>
+        <h1 class="text-3xl font-bold text-textMain mb-2">مرحباً بك في ستارت أكاديمي</h1>
+        <p class="text-textMuted">قم بتسجيل الدخول للمتابعة</p>
+      </div>
+
+      <div class="soft-card p-8">
+        <form onsubmit="startApp.handleLogin(event)" class="space-y-6">
+          <div>
+            <label class="block text-sm font-semibold text-textMain mb-2">اسم المستخدم أو البريد الإلكتروني</label>
+            <input type="text" id="username" class="form-input" placeholder="أدخل اسم المستخدم" required>
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-textMain mb-2">كلمة المرور</label>
+            <input type="password" id="password" class="form-input" placeholder="أدخل كلمة المرور" required>
+          </div>
+          
+          <button type="submit" class="btn-primary w-full text-lg mt-4">تسجيل الدخول</button>
+        </form>
+      </div>
+    </section>
+
+    <!-- ==============================================
+         VIEW 1: ROLE SELECTION
+    =============================================== -->
+    <section id="view-role" class="hide space-y-6" aria-label="اختيار الدور">
+      <div class="text-center mb-8">
+        <div class="w-16 h-16 mx-auto bg-white rounded-full shadow-soft flex items-center justify-center mb-4 text-primary">
+          <svg viewBox="0 0 24 24" fill="currentColor" class="w-8 h-8">
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+          </svg>
+        </div>
+        <h1 class="text-3xl font-bold text-textMain mb-2">من أنت؟</h1>
+        <p class="text-textMuted">اختر دورك للمتابعة في المنصة</p>
+      </div>
+      
+      <div class="grid gap-4" role="list">
+        <!-- Athlete -->
+        <button onclick="startApp.selectRole('athlete')" class="soft-card p-6 flex items-center justify-between w-full text-right" role="listitem">
+          <div class="flex items-center gap-4">
+            <div class="w-14 h-14 bg-blue-50 text-primary rounded-full flex items-center justify-center shrink-0">
+              <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+            </div>
+            <div>
+              <h2 class="text-xl font-bold text-textMain">لاعب</h2>
+              <p class="text-sm text-textMuted mt-1">Athlete</p>
+            </div>
+          </div>
+          <svg class="w-6 h-6 text-gray-400 shrink-0 transform rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+        </button>
+
+        <!-- Coach -->
+        <button onclick="startApp.selectRole('coach')" class="soft-card p-6 flex items-center justify-between w-full text-right" role="listitem">
+          <div class="flex items-center gap-4">
+            <div class="w-14 h-14 bg-blue-50 text-primary rounded-full flex items-center justify-center shrink-0">
+              <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+            </div>
+            <div>
+              <h2 class="text-xl font-bold text-textMain">مدرب</h2>
+              <p class="text-sm text-textMuted mt-1">Coach</p>
+            </div>
+          </div>
+          <svg class="w-6 h-6 text-gray-400 shrink-0 transform rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+        </button>
+
+        <!-- Club -->
+        <button onclick="startApp.selectRole('club')" class="soft-card p-6 flex items-center justify-between w-full text-right" role="listitem">
+          <div class="flex items-center gap-4">
+            <div class="w-14 h-14 bg-blue-50 text-primary rounded-full flex items-center justify-center shrink-0">
+              <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
+            </div>
+            <div>
+              <h2 class="text-xl font-bold text-textMain">نادي</h2>
+              <p class="text-sm text-textMuted mt-1">Club Admin</p>
+            </div>
+          </div>
+          <svg class="w-6 h-6 text-gray-400 shrink-0 transform rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+        </button>
+      </div>
+    </section>
+
+    <!-- ==============================================
+         VIEW 2: ATHLETE SUB-MENU
+    =============================================== -->
+    <section id="view-athlete" class="hide space-y-6" aria-label="قائمة اللاعب">
+      <div class="text-center mb-8 pt-4">
+        <h1 class="text-3xl font-bold text-textMain mb-2">لوحة تحكم اللاعب</h1>
+        <p class="text-textMuted">مرحباً بك في ملفك الشخصي الرياضي</p>
+      </div>
+
+      <div class="grid gap-4">
+        <!-- Option A: Orientation -->
+        <button onclick="startApp.goToPlaceholder('التوجيه الرياضي', 'athlete')" class="soft-card p-6 flex flex-col items-center justify-center text-center">
+          <div class="w-16 h-16 bg-blue-50 text-primary rounded-full flex items-center justify-center mb-4">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"></path></svg>
+          </div>
+          <h2 class="text-2xl font-bold text-textMain mb-2">التوجيه الرياضي</h2>
+          <p class="text-sm text-textMuted">اكتشف الرياضة الأنسب لقدراتك عبر اختبارات متخصصة</p>
+        </button>
+
+        <!-- Option B: Choose Sport -->
+        <button onclick="startApp.goToSportsList()" class="soft-card p-6 flex flex-col items-center justify-center text-center">
+          <div class="w-16 h-16 bg-blue-50 text-primary rounded-full flex items-center justify-center mb-4">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10l-2 1m0 0l-2-1m2 1v2.5M20 7l-2 1m2-1l-2-1m2 1v2.5M14 4l-2-1-2 1M4 7l2-1M4 7l2 1M4 7v2.5M12 21l-2-1m2 1l2-1m-2 1v-2.5M6 18l-2-1v-2.5M18 18l2-1v-2.5"></path></svg>
+          </div>
+          <h2 class="text-2xl font-bold text-textMain mb-2">قائمة الرياضات</h2>
+          <p class="text-sm text-textMuted">تصفح القائمة الشاملة للرياضات الأولمبية وانضم الآن</p>
+        </button>
+
+        <!-- Option C: My Training Plan -->
+        <button onclick="startApp.goToPlaceholder('خطتي التدريبية', 'athlete')" class="soft-card p-6 flex flex-col items-center justify-center text-center">
+          <div class="w-16 h-16 bg-blue-50 text-primary rounded-full flex items-center justify-center mb-4">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+          </div>
+          <h2 class="text-2xl font-bold text-textMain mb-2">خطتي التدريبية</h2>
+          <p class="text-sm text-textMuted">عرض جدول التمارين والمنافسات القادمة</p>
+        </button>
+      </div>
+    </section>
+
+    <!-- ==============================================
+         VIEW 3: SPORTS SELECTION LIST (47 Olympic Sports)
+    =============================================== -->
+    <section id="view-sports" class="hide space-y-6" aria-label="قائمة الرياضات">
+      <button id="btn-sports-back" onclick="startApp.goBack('athlete')" class="text-textMuted hover:text-primary flex items-center gap-2 mb-4 font-semibold transition-colors h-12">
+        <svg class="w-5 h-5 transform rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+        العودة للوحة التحكم
+      </button>
+
+      <div class="text-center mb-6">
+        <h1 class="text-3xl font-bold text-textMain mb-2">الرياضات الأولمبية</h1>
+        <p class="text-textMuted">ابحث عن رياضتك المفضلة من ضمن 47 رياضة أولمبية</p>
+      </div>
+
+      <!-- Search Bar -->
+      <div class="relative mb-6">
+        <div class="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none">
+          <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+        </div>
+        <input type="text" id="searchInput" oninput="startApp.filterSports()" placeholder="ابحث عن رياضة (عربي / English)..." 
+               class="w-full pl-4 pr-12 py-4 rounded-[20px] border-none shadow-soft focus:ring-2 focus:ring-primary focus:outline-none text-base bg-white placeholder-gray-400">
+      </div>
+
+      <!-- Categories -->
+      <div class="flex overflow-x-auto gap-3 pb-4 no-scrollbar border-b border-gray-100" role="tablist">
+        <button id="tab-all" onclick="startApp.setCategory('all')" class="px-6 py-3 rounded-full font-bold transition-all bg-primary text-white shadow-md whitespace-nowrap min-h-[50px]" role="tab">الكل</button>
+        <button id="tab-individual" onclick="startApp.setCategory('individual')" class="px-6 py-3 rounded-full font-bold transition-all bg-white text-textMuted shadow-sm hover:shadow-md whitespace-nowrap min-h-[50px]" role="tab">فردية</button>
+        <button id="tab-team" onclick="startApp.setCategory('team')" class="px-6 py-3 rounded-full font-bold transition-all bg-white text-textMuted shadow-sm hover:shadow-md whitespace-nowrap min-h-[50px]" role="tab">جماعية</button>
+      </div>
+
+      <!-- Sports Grid -->
+      <div id="sportsGrid" class="grid grid-cols-2 gap-4 mt-6" role="list">
+        <!-- Rendered by JS -->
+      </div>
+      
+      <!-- No Results -->
+      <div id="noResults" class="hide text-center py-10 text-textMuted">
+        <p class="font-semibold">لا توجد رياضات مطابقة لبحثك</p>
+      </div>
+    </section>
+
+    <!-- ==============================================
+         VIEW 4: PLACEHOLDER (COMING SOON)
+    =============================================== -->
+    <section id="view-placeholder" class="hide space-y-6" aria-label="قريباً">
+      <button id="btn-ph-back" class="text-textMuted hover:text-primary flex items-center gap-2 mb-4 font-semibold transition-colors h-12">
+        <svg class="w-5 h-5 transform rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+        العودة
+      </button>
+
+      <div class="soft-card p-10 flex flex-col items-center justify-center text-center min-h-[400px]">
+        <div class="w-24 h-24 bg-blue-50 text-primary rounded-full flex items-center justify-center mb-6">
+          <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+        </div>
+        <h1 id="placeholder-title" class="text-3xl font-bold text-textMain mb-4">قريباً</h1>
+        <p class="text-textMuted max-w-sm mx-auto mb-8 leading-relaxed">
+          نعمل على تطوير هذه الخاصية حالياً. ستكون متاحة في التحديث القادم من المنصة لتقديم أفضل تجربة ممكنة.
+        </p>
+        <button id="btn-ph-home" onclick="startApp.routeUser()" class="btn-primary">العودة للرئيسية</button>
+      </div>
+    </section>
+
+    <!-- ==============================================
+         VIEW 5: COACH DASHBOARD OPTIONS
+    =============================================== -->
+    <section id="view-coach-options" class="hide space-y-6" aria-label="خيارات المدرب">
+      <div class="text-center mb-8 pt-4">
+        <h1 id="coach-sport-title" class="text-3xl font-bold text-textMain mb-2">لوحة تحكم المدرب</h1>
+        <p class="text-textMuted">إدارة لاعبيك واختبارات المواهب</p>
+      </div>
+
+      <div class="grid gap-4">
+        <!-- Option A: My Athletes -->
+        <button onclick="startApp.goToAllAthletes()" class="soft-card p-6 flex flex-col items-center justify-center text-center">
+          <div class="w-16 h-16 bg-blue-50 text-primary rounded-full flex items-center justify-center mb-4">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+          </div>
+          <h2 class="text-2xl font-bold text-textMain mb-2">قائمة اللاعبين</h2>
+          <p class="text-sm text-textMuted">عرض بيانات اللاعبين والبحث في القائمة</p>
+        </button>
+
+        <!-- Option B: Talent Selection -->
+        <button onclick="startApp.goToPlaceholder('الانتقاء الرياضي', 'coach')" class="soft-card p-6 flex flex-col items-center justify-center text-center">
+          <div class="w-16 h-16 bg-blue-50 text-primary rounded-full flex items-center justify-center mb-4">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"></path></svg>
+          </div>
+          <h2 class="text-2xl font-bold text-textMain mb-2">الانتقاء الرياضي</h2>
+          <p class="text-sm text-textMuted">إجراء اختبارات وتقييم المواهب الرياضية الجديدة</p>
+        </button>
+      </div>
+    </section>
+
+    <!-- ==============================================
+         VIEW 6: CLUB DASHBOARD (Admin)
+    =============================================== -->
+    <section id="view-club" class="hide space-y-6" aria-label="لوحة تحكم النادي">
+      <div class="text-center mb-8 pt-4">
+        <h1 class="text-3xl font-bold text-textMain mb-2">لوحة الإدارة (النادي)</h1>
+        <p class="text-textMuted">إدارة شاملة للاعبين، المدربين، والرياضات</p>
+      </div>
+
+      <div class="grid gap-4 md:grid-cols-2">
+        <!-- All Athletes Database -->
+        <button onclick="startApp.goToAllAthletes()" class="soft-card p-8 flex flex-col items-center justify-center text-center min-h-[180px]">
+          <div class="w-16 h-16 bg-blue-50 text-primary rounded-full flex items-center justify-center mb-4">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+          </div>
+          <h2 class="text-2xl font-bold text-textMain mb-2">اللاعبين</h2>
+          <p class="text-sm text-textMuted">قاعدة بيانات المشتركين وإضافة لاعبين جدد</p>
+        </button>
+
+        <!-- Coaches Database -->
+        <button onclick="startApp.goToAllCoaches()" class="soft-card p-8 flex flex-col items-center justify-center text-center min-h-[180px]">
+          <div class="w-16 h-16 bg-blue-50 text-primary rounded-full flex items-center justify-center mb-4">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+          </div>
+          <h2 class="text-2xl font-bold text-textMain mb-2">المدربين</h2>
+          <p class="text-sm text-textMuted">إدارة الكادر الفني وإضافة مدربين جدد</p>
+        </button>
+
+        <!-- Sports Specific -->
+        <button onclick="startApp.goToSportsList()" class="soft-card p-8 flex flex-col items-center justify-center text-center min-h-[180px]">
+          <div class="w-16 h-16 bg-blue-50 text-primary rounded-full flex items-center justify-center mb-4">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10l-2 1m0 0l-2-1m2 1v2.5M20 7l-2 1m2-1l-2-1m2 1v2.5M14 4l-2-1-2 1M4 7l2-1M4 7l2 1M4 7v2.5M12 21l-2-1m2 1l2-1m-2 1v-2.5M6 18l-2-1v-2.5M18 18l2-1v-2.5"></path></svg>
+          </div>
+          <h2 class="text-2xl font-bold text-textMain mb-2">الرياضات</h2>
+          <p class="text-sm text-textMuted">استعراض قوائم اللاعبين مقسمة حسب الرياضة</p>
+        </button>
+
+        <!-- Orientation -->
+        <button onclick="startApp.goToPlaceholder('الانتقاء والتوجيه', 'club')" class="soft-card p-8 flex flex-col items-center justify-center text-center min-h-[180px]">
+          <div class="w-16 h-16 bg-blue-50 text-primary rounded-full flex items-center justify-center mb-4">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"></path></svg>
+          </div>
+          <h2 class="text-2xl font-bold text-textMain mb-2">التوجيه</h2>
+          <p class="text-sm text-textMuted">إدارة عمليات التوجيه للمواهب الجديدة</p>
+        </button>
+      </div>
+    </section>
+
+    <!-- ==============================================
+         VIEW 7: CLUB PLAYERS LIST (Specific Sport)
+    =============================================== -->
+    <section id="view-club-players" class="hide space-y-6" aria-label="قائمة لاعبي النادي">
+      <div class="flex items-center justify-between mb-4">
+        <button onclick="startApp.goBack('sports')" class="text-textMuted hover:text-primary flex items-center gap-2 font-semibold transition-colors h-12">
+          <svg class="w-5 h-5 transform rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+          العودة للرياضات
+        </button>
+        <!-- Only Club and Coach can add athletes here -->
+        <button id="btn-add-specific-athlete" onclick="startApp.openAddAthleteModal(document.getElementById('club-players-title').innerText.replace('لاعبو ', ''))" class="btn-primary px-4 py-2 text-sm h-10 shadow-soft hover:shadow-soft-hover hide">
+          <svg class="w-4 h-4 ml-1 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+          إضافة لاعب
+        </button>
+      </div>
+      
+      <div class="text-center mb-8">
+        <h1 class="text-3xl font-bold text-textMain mb-2" id="club-players-title">قائمة اللاعبين</h1>
+        <p class="text-textMuted" id="club-players-subtitle">اللاعبون المسجلون في هذه الرياضة</p>
+      </div>
+
+      <!-- Search Bar -->
+      <div class="relative mb-6">
+        <div class="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none">
+          <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+        </div>
+        <input type="text" id="sportAthletesSearchInput" oninput="startApp.filterSportAthletes()" placeholder="ابحث بالاسم، المستوى، أو رقم التواصل..." 
+               class="w-full pl-4 pr-12 py-4 rounded-[20px] border-none shadow-soft focus:ring-2 focus:ring-primary focus:outline-none text-base bg-white placeholder-gray-400">
+      </div>
+
+      <div class="space-y-4" id="club-players-list">
+        <!-- Populated via JS -->
+      </div>
+      
+      <!-- No Results -->
+      <div id="sportAthletesNoResults" class="hide text-center py-8 text-gray-500 font-bold bg-white rounded-3xl shadow-sm">
+        لا يوجد لاعب مطابق في هذه الرياضة
+      </div>
+    </section>
+
+    <!-- ==============================================
+         VIEW 8: ALL ATHLETES (Master Database)
+    =============================================== -->
+    <section id="view-club-all-players" class="hide space-y-6" aria-label="جميع اللاعبين">
+      <button id="btn-back-all-athletes" class="text-textMuted hover:text-primary flex items-center gap-2 mb-4 font-semibold transition-colors h-12">
+        <svg class="w-5 h-5 transform rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+        العودة للوحة التحكم
+      </button>
+      
+      <div class="text-center mb-6">
+        <h1 class="text-3xl font-bold text-textMain mb-2">قاعدة بيانات اللاعبين</h1>
+        <p class="text-textMuted">سجل شامل باللاعبين المضافين</p>
+      </div>
+
+      <!-- Header & Actions -->
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+        <div class="relative w-full md:w-2/3">
+          <div class="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none">
+            <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+          </div>
+          <input type="text" id="allAthletesSearchInput" oninput="startApp.filterAllAthletes()" placeholder="ابحث بالاسم، الرياضة، أو المستوى..." 
+                 class="w-full pl-4 pr-12 py-4 rounded-[20px] border-none shadow-soft focus:ring-2 focus:ring-primary focus:outline-none text-base bg-white placeholder-gray-400">
+        </div>
+        <button id="btn-add-global-athlete" onclick="startApp.openAddAthleteModal()" class="btn-primary w-full md:w-auto px-6 whitespace-nowrap shadow-soft hover:shadow-soft-hover hide">
+          <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+          إضافة لاعب
+        </button>
+      </div>
+
+      <div class="bg-white rounded-[20px] shadow-soft overflow-hidden w-full overflow-x-auto">
+        <table class="w-full text-right border-collapse min-w-[500px]">
+          <thead>
+            <tr class="bg-gray-50 border-b border-gray-100">
+              <th class="p-4 font-bold text-textMain whitespace-nowrap">الاسم</th>
+              <th class="p-4 font-bold text-textMain whitespace-nowrap">الرياضة</th>
+              <th class="p-4 font-bold text-textMain whitespace-nowrap">المستوى</th>
+              <th class="p-4 font-bold text-textMain whitespace-nowrap">التواصل</th>
+            </tr>
+          </thead>
+          <tbody id="all-athletes-tbody" class="divide-y divide-gray-50">
+            <!-- Populated via JS -->
+          </tbody>
+        </table>
+        <!-- No Results -->
+        <div id="allAthletesNoResults" class="hide text-center py-10 text-textMuted">
+          <p class="font-semibold">لا توجد نتائج مطابقة لبحثك</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==============================================
+         VIEW 9: ALL COACHES (Club Admin Only)
+    =============================================== -->
+    <section id="view-club-coaches" class="hide space-y-6" aria-label="جميع المدربين">
+      <button onclick="startApp.goBack('club')" class="text-textMuted hover:text-primary flex items-center gap-2 mb-4 font-semibold transition-colors h-12">
+        <svg class="w-5 h-5 transform rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+        العودة للوحة التحكم
+      </button>
+      
+      <div class="text-center mb-6">
+        <h1 class="text-3xl font-bold text-textMain mb-2">إدارة المدربين</h1>
+        <p class="text-textMuted">سجل شامل بالكادر الفني للنادي</p>
+      </div>
+
+      <!-- Header & Actions -->
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+        <div class="relative w-full md:w-2/3">
+          <div class="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none">
+            <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+          </div>
+          <input type="text" id="coachesSearchInput" oninput="startApp.filterAllCoaches()" placeholder="ابحث باسم المدرب أو الرياضة..." 
+                 class="w-full pl-4 pr-12 py-4 rounded-[20px] border-none shadow-soft focus:ring-2 focus:ring-primary focus:outline-none text-base bg-white placeholder-gray-400">
+        </div>
+        <button onclick="startApp.openAddCoachModal()" class="btn-primary w-full md:w-auto px-6 whitespace-nowrap shadow-soft hover:shadow-soft-hover">
+          <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+          إضافة مدرب
+        </button>
+      </div>
+
+      <div class="space-y-4" id="coaches-list">
+        <!-- Populated via JS -->
+      </div>
+      
+      <!-- No Results -->
+      <div id="coachesNoResults" class="hide text-center py-8 text-gray-500 font-bold bg-white rounded-3xl shadow-sm">
+        لا يوجد مدرب مطابق لبحثك
+      </div>
+    </section>
+
+    <!-- ==============================================
+         SETTINGS ICON & DROPDOWN
+    =============================================== -->
+    <div id="settings-button-container" class="hide fixed top-4 left-4 z-50">
+      <div style="position: relative;">
+        <!-- Gear Icon -->
+        <button id="settings-toggle-btn" onclick="startApp.toggleSettings(event)" style="background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 50%; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; color: #64748b; cursor: pointer; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); transition: 0.2s;" onmouseover="this.style.color='#007BFF'; this.style.borderColor='#007BFF';" onmouseout="this.style.color='#64748b'; this.style.borderColor='#e2e8f0';">
+          <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 00-2.573 1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573-1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37-.996-.608-2.296-.07-2.572 1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+        </button>
+        
+        <!-- Floating Menu -->
+        <div id="settings-dropdown" style="display: none; position: absolute; top: 54px; left: 0; background-color: #ffffff; width: 220px; border-radius: 16px; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.05); padding: 0.5rem; border: 1px solid #f1f5f9; z-index: 100;">
+          <div style="padding: 0.5rem 1rem; border-bottom: 1px solid #f1f5f9; margin-bottom: 0.5rem;">
+            <p style="font-weight: 700; color: #1e293b; font-size: 0.9rem;">الإعدادات</p>
+          </div>
+          <button onclick="startApp.confirmRoleChange()" style="width: 100%; text-align: right; padding: 0.75rem 1rem; border-radius: 12px; background-color: #fee2e2; color: #ef4444; font-weight: 700; font-size: 0.9rem; border: none; cursor: pointer; transition: 0.2s;" onmouseover="this.style.backgroundColor='#fecaca';" onmouseout="this.style.backgroundColor='#fee2e2';">
+            تغيير نوع الحساب / خروج
+          </button>
+        </div>
+      </div>
+    </div>
+    
+  </main>
+
+  <!-- ==============================================
+       MODAL: ADD ATHLETE
+  =============================================== -->
+  <div id="add-athlete-modal" class="modal-overlay hide">
+    <div class="custom-modal fade-in max-h-[90vh] overflow-y-auto">
+      <div class="flex justify-between items-center mb-6 border-b border-gray-100 pb-4">
+        <h2 class="text-2xl font-bold text-textMain">إضافة لاعب جديد</h2>
+        <button onclick="startApp.closeAddAthleteModal()" class="text-gray-400 hover:text-red-500 transition-colors p-2">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
+      </div>
+      
+      <form id="add-athlete-form" onsubmit="startApp.saveAthlete(event)" class="space-y-4">
+        <div>
+          <label class="block text-sm font-semibold text-textMain mb-1">اسم اللاعب</label>
+          <input type="text" id="athlete-name" class="form-input py-3" placeholder="الاسم ثلاثي" required>
+        </div>
+        
+        <div>
+          <label class="block text-sm font-semibold text-textMain mb-1">الرياضة</label>
+          <select id="athlete-sport" class="form-input py-3" onchange="startApp.populateCoachesForSport(this.value)" required>
+            <option value="" disabled selected>اختر الرياضة</option>
+            <!-- Populated by JS -->
+          </select>
+        </div>
+
+        <div id="coach-assignment-container" class="hide">
+          <label class="block text-sm font-semibold text-textMain mb-1">تعيين مدرب (اختياري)</label>
+          <select id="athlete-coach" class="form-input py-3">
+            <option value="">بدون مدرب</option>
+            <!-- Populated by JS when sport is selected -->
+          </select>
+        </div>
+        
+        <div>
+          <label class="block text-sm font-semibold text-textMain mb-1">المستوى</label>
+          <select id="athlete-level" class="form-input py-3" required>
+            <option value="" disabled selected>اختر المستوى</option>
+            <option value="مبتدئ">مبتدئ</option>
+            <option value="متوسط">متوسط</option>
+            <option value="متقدم">متقدم</option>
+          </select>
+        </div>
+        
+        <div>
+          <label class="block text-sm font-semibold text-textMain mb-1">رقم التواصل</label>
+          <input type="tel" id="athlete-phone" class="form-input py-3" placeholder="أدخل رقم الهاتف" required>
+        </div>
+        
+        <button type="submit" class="btn-primary w-full text-lg mt-4 shadow-soft">حفظ اللاعب</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==============================================
+       MODAL: ADD COACH
+  =============================================== -->
+  <div id="add-coach-modal" class="modal-overlay hide">
+    <div class="custom-modal fade-in max-h-[90vh] overflow-y-auto">
+      <div class="flex justify-between items-center mb-6 border-b border-gray-100 pb-4">
+        <h2 class="text-2xl font-bold text-textMain">إضافة مدرب جديد</h2>
+        <button onclick="startApp.closeAddCoachModal()" class="text-gray-400 hover:text-red-500 transition-colors p-2">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
+      </div>
+      
+      <form id="add-coach-form" onsubmit="startApp.saveCoach(event)" class="space-y-4">
+        <div>
+          <label class="block text-sm font-semibold text-textMain mb-1">اسم المدرب</label>
+          <input type="text" id="coach-name" class="form-input py-3" placeholder="الاسم ثلاثي" required>
+        </div>
+        
+        <div>
+          <label class="block text-sm font-semibold text-textMain mb-1">الرياضة (التخصص)</label>
+          <select id="coach-sport" class="form-input py-3" required>
+            <option value="" disabled selected>اختر الرياضة</option>
+            <!-- Populated by JS -->
+          </select>
+        </div>
+        
+        <div>
+          <label class="block text-sm font-semibold text-textMain mb-1">رقم التواصل</label>
+          <input type="tel" id="coach-phone" class="form-input py-3" placeholder="أدخل رقم الهاتف" required>
+        </div>
+        
+        <button type="submit" class="btn-primary w-full text-lg mt-4 shadow-soft">حفظ المدرب</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==============================================
+       TOAST NOTIFICATION
+  =============================================== -->
+  <div id="toast-message" class="fixed bottom-6 left-1/2 -translate-x-1/2 bg-green-500 text-white px-6 py-3 rounded-[16px] shadow-lg text-sm font-bold opacity-0 transition-opacity duration-300 pointer-events-none z-[10000]">
+    تمت العملية بنجاح
+  </div>
+
+  <script src="./role.js"></script>
+</body>
+</html>
